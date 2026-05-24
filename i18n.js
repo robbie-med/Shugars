@@ -86,7 +86,7 @@ window.I18N = {
     "method.adjust.title": "Adjustments",
     "method.adjust.body":  "Cox models stratified by age and sex, adjusted for BMI, smoking, alcohol, physical activity, blood pressure, lipids, and household income. Reference band: 90–94 mg/dL. HRs reported per 18 mg/dL (1 mmol/L) increment.",
     "method.limits.title": "Limitations",
-    "method.limits.body":  "Single fasting measurement underestimates true effect (regression dilution). Korean population may not generalize to other ethnic groups. The hypoglycemia arm is approximated from Figure 2 since Table 2 does not stratify HRs below 80 mg/dL. Causation is not established.",
+    "method.limits.body":  "Single fasting measurement underestimates true effect (regression dilution). Korean population may not generalize to other ethnic groups. The plotted curve applies Table 2's published per-18 mg/dL log-linear slopes (the &lt;100, 100–199 fits) anchored to the 90–94 mg/dL reference; the paper's restricted-cubic-spline curves (Fig. 3) are non-linear below ~70 mg/dL but their coefficients are not published. Causation is not established.",
     "method.cite.kicker":  "Citation",
 
     "foot.disclaimer.lbl":  "Educational use only.",
@@ -109,7 +109,9 @@ window.I18N = {
     "hr.below":      "Slightly below reference — within optimal range",
     "hr.lowest":     "Within the lowest-mortality fasting glucose range.",
     "hr.hypo":       "Below the safe range — mortality risk rises sharply here.",
-    "hr.ref.text":   "HR per +18 mg/dL in your group · {age} · {sex}: <span class='hl'>{hr}× per 18 mg/dL</span>",
+    "hr.ref.text":      "Paper Table 2 · {range} · {age} · {sex}: <span class='hl'>HR {hr}× per +18 mg/dL</span>",
+    "hr.ref.range.lo":  "<100 mg/dL slope",
+    "hr.ref.range.dm":  "100–199 mg/dL slope",
 
     // Tooltip
     "tip.glucose":  "Fasting glucose",
@@ -235,7 +237,7 @@ window.I18N = {
     "method.adjust.title": "보정 변수",
     "method.adjust.body":  "연령·성별로 층화된 Cox 모델, BMI·흡연·음주·신체활동·혈압·지질·가구소득으로 보정. 기준 범위: 90–94 mg/dL. 위험비는 18 mg/dL (1 mmol/L) 증가당 보고.",
     "method.limits.title": "한계점",
-    "method.limits.body":  "단일 공복혈당 측정은 실제 효과를 과소평가합니다(회귀 희석). 한국인 대상이므로 타 인종 집단에 일반화되지 않을 수 있습니다. Table 2에 80 mg/dL 미만의 위험비가 분층되어 있지 않아 저혈당 영역은 Figure 2에서 근사한 값입니다. 인과관계는 확립되지 않았습니다.",
+    "method.limits.body":  "단일 공복혈당 측정은 실제 효과를 과소평가합니다(회귀 희석). 한국인 대상이므로 타 인종 집단에 일반화되지 않을 수 있습니다. 표시된 곡선은 Table 2의 발표된 18 mg/dL당 로그-선형 기울기(&lt;100, 100–199 구간 적합)를 90–94 mg/dL 기준에 맞춰 적용한 것입니다. 논문 Figure 3의 제한된 3차 스플라인 곡선은 약 70 mg/dL 미만에서 비선형이지만 계수가 발표되지 않았습니다. 인과관계는 확립되지 않았습니다.",
     "method.cite.kicker":  "인용",
 
     "foot.disclaimer.lbl":  "교육 목적 전용.",
@@ -256,7 +258,9 @@ window.I18N = {
     "hr.below":      "기준보다 약간 낮음 — 최적 범위 내",
     "hr.lowest":     "사망률이 가장 낮은 공복혈당 범위에 있습니다.",
     "hr.hypo":       "안전 범위 미만 — 이 영역에서 사망 위험이 가파르게 상승합니다.",
-    "hr.ref.text":   "당신의 그룹 · {age} · {sex}: <span class='hl'>18 mg/dL당 {hr}×</span>",
+    "hr.ref.text":      "논문 Table 2 · {range} · {age} · {sex}: <span class='hl'>18 mg/dL당 위험비 {hr}×</span>",
+    "hr.ref.range.lo":  "<100 mg/dL 구간 기울기",
+    "hr.ref.range.dm":  "100–199 mg/dL 구간 기울기",
 
     "tip.glucose":  "공복혈당",
     "tip.hr":       "위험비",

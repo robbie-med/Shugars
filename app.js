@@ -3,27 +3,32 @@
 //  Vanilla JS, zero dependencies. Static-hostable on GitHub Pages.
 // ────────────────────────────────────────────────────────────
 
-// ── Hazard-ratio table from Yi et al. 2017, Table 2 ─────────
-//   HR per 18 mg/dL (1 mmol/L) increase in fasting glucose
+// ── Hazard-ratio table — Yi et al. 2017, Table 2 ────────────
+//   HR per 18 mg/dL (1 mmol/L) increase in fasting glucose,
+//   stratified by sex, age group, and FSG range. Verified
+//   against the paper's text extraction (Table 2 in full).
+//     lo  = HR per +18 mg/dL within  <100 mg/dL  range  (Table 2)
+//     pd  = HR per +18 mg/dL within 100–125 mg/dL range  (Table 2)
+//     dm  = HR per +18 mg/dL within 100–199 mg/dL range  (Table 2)
 const HR_TABLE = {
   male: {
-    "18–34": { pd: 1.30, dm: 1.15 },
-    "35–44": { pd: 1.31, dm: 1.17 },
-    "45–54": { pd: 1.24, dm: 1.15 },
-    "55–64": { pd: 1.21, dm: 1.14 },
-    "65–74": { pd: 1.17, dm: 1.11 },
-    "75–99": { pd: 1.12, dm: 1.09 },
+    "18–34": { lo: 1.00, pd: 1.30, dm: 1.15 },
+    "35–44": { lo: 0.95, pd: 1.31, dm: 1.17 },
+    "45–54": { lo: 0.97, pd: 1.24, dm: 1.15 },
+    "55–64": { lo: 0.93, pd: 1.21, dm: 1.14 },
+    "65–74": { lo: 0.95, pd: 1.17, dm: 1.11 },
+    "75–99": { lo: 0.95, pd: 1.12, dm: 1.08 },
   },
   female: {
-    "18–34": { pd: 1.25, dm: 1.12 },
-    "35–44": { pd: 1.36, dm: 1.17 },
-    "45–54": { pd: 1.32, dm: 1.13 },
-    "55–64": { pd: 1.20, dm: 1.14 },
-    "65–74": { pd: 1.19, dm: 1.13 },
-    "75–99": { pd: 1.13, dm: 1.10 },
+    "18–34": { lo: 0.95, pd: 1.25, dm: 1.12 },
+    "35–44": { lo: 0.98, pd: 1.36, dm: 1.17 },
+    "45–54": { lo: 0.95, pd: 1.32, dm: 1.13 },
+    "55–64": { lo: 0.98, pd: 1.20, dm: 1.14 },
+    "65–74": { lo: 0.95, pd: 1.19, dm: 1.13 },
+    "75–99": { lo: 0.98, pd: 1.13, dm: 1.10 },
   },
 };
-const REF = 92; // midpoint of reference category 90–94 mg/dL
+const REF = 92; // midpoint of 90–94 mg/dL reference category (Figure 2 method)
 
 function getAgeGroup(a) {
   if (a <= 34) return "18–34";
@@ -34,17 +39,20 @@ function getAgeGroup(a) {
   return "75–99";
 }
 
+// HR curve faithful to Table 2 only — no Figure-2 visual approximations.
+//   Paper: "fasting glucose levels associated with the lowest mortality
+//   were 80–94 mg/dL." → flat HR = 1.0 across that band.
+//   Outside the band, apply the published per-18 mg/dL slope log-linearly
+//   from the reference (g = 92): HR(g) = slope ^ ((g − 92) / 18).
+//   The 100–125 (pd) slope is the steeper within-range fit; it is shown
+//   as interpretive context but not used to draw the curve, because the
+//   paper's headline continuous model for the elevated range is the
+//   100–199 (dm) log-linear fit (Methods §, p.4).
 function computeHR(g, age, sex) {
-  const ag = getAgeGroup(age);
-  const { pd, dm } = HR_TABLE[sex][ag];
-  if (g >= 80 && g <= 94)  return 1.0;
-  if (g >= 95 && g <= 99)  return 1.0 + (g - 94) * 0.004;
-  if (g >= 100 && g <= 125) return Math.pow(pd, (g - REF) / 18);
-  if (g > 125)              return Math.pow(dm, (g - REF) / 18);
-  // Left arm (hypoglycemia) approximated from Figure 2
-  if (g >= 70) return 1.0 + (80 - g) * 0.034;
-  if (g >= 60) return 1.34 + (70 - g) * 0.042;
-  return 1.76 + (60 - g) * 0.05;
+  const { lo, dm } = HR_TABLE[sex][getAgeGroup(age)];
+  if (g >= 80 && g <= 94) return 1.0;
+  if (g > 94)  return Math.pow(dm, (g - REF) / 18);
+  return         Math.pow(lo, (g - REF) / 18);
 }
 
 // ── Categories ──────────────────────────────────────────────
@@ -104,7 +112,7 @@ function buildChart(containerEl, opts) {
   }
   const maxHR = Math.max(...pts.map(p => p.hr), 2.5);
   const yMax = Math.min(maxHR * 1.05, 6);
-  const yMin = 0.6;
+  const yMin = 0.9; // HR floor is 1.0 (optimal); small padding below
 
   const xScale = g  => pad.l + ((g - 50) / (270 - 50)) * plotW;
   const yScale = hr => pad.t + (1 - Math.min(1, Math.max(0, (hr - yMin) / (yMax - yMin)))) * plotH;
@@ -349,14 +357,17 @@ function renderPersonal() {
   const pct = Math.min(100, Math.max(0, ((hr - 0.7) / (3.3 - 0.7)) * 100));
   document.getElementById("barFill").style.width = pct + "%";
 
-  // Ref row (only when above 99 / below 80)
+  // Ref row — show the Table 2 slope that the user's current zone falls in.
+  // Hidden when in the optimal band (HR = 1, no slope to report).
   const refRow = document.getElementById("refRow");
-  if (g > 99) {
+  if (g < 80 || g > 94) {
     refRow.hidden = false;
     const tab = HR_TABLE[state.sex][ageGroup];
-    const hrSlope = (g <= 125 ? tab.pd : tab.dm).toFixed(2);
+    const slope = g < 80 ? tab.lo : tab.dm;
+    const rangeKey = g < 80 ? "hr.ref.range.lo" : "hr.ref.range.dm";
     document.getElementById("refRowText").innerHTML = t("hr.ref.text", {
-      age: ageGroup, sex: t(`sex.${state.sex}`), hr: hrSlope,
+      range: t(rangeKey), age: ageGroup, sex: t(`sex.${state.sex}`),
+      hr: slope.toFixed(2),
     });
   } else {
     refRow.hidden = true;
