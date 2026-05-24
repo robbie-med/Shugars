@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive explorer for Yi et al. (2017) on fasting glucose and all-cause mortality. Visualize your personal risk and learn what you can do to improve it." />
+  <title>Glucose &amp; Mortality · Risk Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A9%B8%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- ── TOP BAR ──────────────────────────────────────────── -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 28" width="28" height="28">
+            <path d="M4 18 C 8 18, 9 6, 14 6 S 20 18, 24 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="14" cy="6" r="2.4" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-eyebrow" data-i18n="brand.eyebrow">Yi et al. · Scientific Reports 2017</div>
+          <h1 class="brand-title" data-i18n="brand.title">Fasting Glucose &amp; Mortality</h1>
+        </div>
+      </div>
+      <nav class="top-nav" aria-label="Sections">
+        <a href="#explore"    data-i18n="nav.explore">Explore the Paper</a>
+        <a href="#personal"   data-i18n="nav.personal">Your Risk</a>
+        <a href="#improve"    data-i18n="nav.improve">How to Improve</a>
+        <a href="#methodology" data-i18n="nav.method">Methodology</a>
+      </nav>
+      <div class="top-actions">
+        <div class="seg" role="group" aria-label="Language">
+          <button data-lang="en" class="seg-btn active" type="button">EN</button>
+          <button data-lang="ko" class="seg-btn" type="button">한국어</button>
+        </div>
+        <button class="theme-btn" type="button" aria-label="Toggle theme" id="themeBtn">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-tag" data-i18n="hero.tag">Interactive risk explorer</div>
+        <h2 class="hero-title">
+          <span data-i18n="hero.title.a">Where does</span>
+          <span class="hero-em" data-i18n="hero.title.b">your fasting glucose</span>
+          <span data-i18n="hero.title.c">put you on the mortality curve?</span>
+        </h2>
+        <p class="hero-sub" data-i18n="hero.sub">
+          A 12.5-million-person Korean cohort followed for 134.9 million person-years revealed a J-shaped relationship between fasting glucose and all-cause mortality. Explore the findings, plot your own data, and learn evidence-based ways to move toward the optimal range.
+        </p>
+        <div class="hero-cta">
+          <a href="#personal" class="btn btn-primary" data-i18n="hero.cta.primary">Calculate my risk</a>
+          <a href="https://www.nature.com/articles/s41598-017-08498-6" target="_blank" rel="noopener" class="btn btn-ghost">
+            <span data-i18n="hero.cta.paper">Read the original paper</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><span class="hstat-val">12.5M</span><span class="hstat-lbl" data-i18n="hero.stat.cohort">Adults studied</span></div>
+        <div class="hstat"><span class="hstat-val">134.9M</span><span class="hstat-lbl" data-i18n="hero.stat.py">Person-years</span></div>
+        <div class="hstat"><span class="hstat-val">80–94</span><span class="hstat-lbl" data-i18n="hero.stat.opt">mg/dL optimal</span></div>
+        <div class="hstat"><span class="hstat-val">632K</span><span class="hstat-lbl" data-i18n="hero.stat.deaths">Deaths observed</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EXPLORE THE PAPER ────────────────────────────────── -->
+  <section class="section" id="explore">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="kicker" data-i18n="explore.kicker">01 · The Paper</div>
+        <h3 class="section-title" data-i18n="explore.title">A J-shape, not a line</h3>
+        <p class="section-sub" data-i18n="explore.sub">
+          Mortality risk doesn't rise smoothly with glucose. It bottoms out in a narrow band (80–94 mg/dL) and climbs on <em>both</em> sides — low glucose carries risk too.
+        </p>
+      </div>
+
+      <div class="explore-grid">
+        <article class="card finding" style="--accent:#10b981">
+          <div class="finding-icon">◉</div>
+          <div class="finding-stat">80–94 <span class="unit">mg/dL</span></div>
+          <h4 class="finding-title" data-i18n="explore.f1.title">Optimal range</h4>
+          <p class="finding-body" data-i18n="explore.f1.body">The nadir of the J-curve, consistent across every age and sex group. Authors propose 100 mg/dL — not the older 110 — as the true upper limit of normoglycemia.</p>
+        </article>
+        <article class="card finding" style="--accent:#f59e0b">
+          <div class="finding-icon">▲</div>
+          <div class="finding-stat">+10–32% <span class="unit">per 18 mg/dL</span></div>
+          <h4 class="finding-title" data-i18n="explore.f2.title">Hyperglycemia risk</h4>
+          <p class="finding-body" data-i18n="explore.f2.body">Each 18 mg/dL above optimal multiplies mortality. The effect is strongest at ages 35–44 and attenuates with age, but never disappears.</p>
+        </article>
+        <article class="card finding" style="--accent:#a78bfa">
+          <div class="finding-icon">▼</div>
+          <div class="finding-stat">&lt; 80 <span class="unit">mg/dL</span></div>
+          <h4 class="finding-title" data-i18n="explore.f3.title">Hypoglycemia arm</h4>
+          <p class="finding-body" data-i18n="explore.f3.body">Below 80 mg/dL, mortality rises sharply — especially under 70. Critical context for people on insulin, sulfonylureas, or those tracking CGM lows.</p>
+        </article>
+        <article class="card finding" style="--accent:#38bdf8">
+          <div class="finding-icon">⚥</div>
+          <div class="finding-stat">Men &gt; Women <span class="unit">until ~73 yr</span></div>
+          <h4 class="finding-title" data-i18n="explore.f4.title">Sex &amp; age divergence</h4>
+          <p class="finding-body" data-i18n="explore.f4.body">Women's glucose rises sharply around menopause (~age 50). The male–female gap peaks at age 48–51 then closes; after ~73 the lines cross.</p>
+        </article>
+      </div>
+
+      <!-- General J-curve illustration -->
+      <div class="card chart-card">
+        <div class="card-head">
+          <div class="kicker-sm" data-i18n="explore.chart.kicker">Reference J-curve</div>
+          <h4 data-i18n="explore.chart.title">All-cause mortality vs. fasting glucose</h4>
+          <p class="muted" data-i18n="explore.chart.sub">Hazard ratio relative to the 90–94 mg/dL reference band. Drag the slider to see how risk changes for different age groups.</p>
+        </div>
+        <div class="explore-controls">
+          <label class="ctrl">
+            <span class="ctrl-lbl" data-i18n="explore.ctrl.age">Age group</span>
+            <div class="seg" id="exploreAgeSeg" role="group">
+              <button class="seg-btn" data-age="28">18–34</button>
+              <button class="seg-btn active" data-age="38">35–44</button>
+              <button class="seg-btn" data-age="48">45–54</button>
+              <button class="seg-btn" data-age="58">55–64</button>
+              <button class="seg-btn" data-age="68">65–74</button>
+              <button class="seg-btn" data-age="80">75–99</button>
+            </div>
+          </label>
+          <label class="ctrl">
+            <span class="ctrl-lbl" data-i18n="explore.ctrl.sex">Sex</span>
+            <div class="seg" id="exploreSexSeg" role="group">
+              <button class="seg-btn active" data-sex="male" data-i18n="sex.male">Male</button>
+              <button class="seg-btn" data-sex="female" data-i18n="sex.female">Female</button>
+            </div>
+          </label>
+        </div>
+        <div class="chart-wrap" id="exploreChart" aria-label="Reference J-curve chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PERSONAL RISK ────────────────────────────────────── -->
+  <section class="section section-accent" id="personal">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="kicker" data-i18n="personal.kicker">02 · Your Data</div>
+        <h3 class="section-title" data-i18n="personal.title">Plot yourself on the curve</h3>
+        <p class="section-sub" data-i18n="personal.sub">Enter your fasting glucose (≥8 hours fasted, taken on waking). Your inputs stay on your device — nothing is sent anywhere.</p>
+      </div>
+
+      <div class="personal-grid">
+        <!-- LEFT: INPUTS + RESULT -->
+        <div class="stack">
+          <div class="card pad">
+            <div class="kicker-sm" data-i18n="personal.params">Your parameters</div>
+
+            <div class="field">
+              <div class="field-head">
+                <span class="field-lbl" data-i18n="personal.glucose">Fasting glucose</span>
+                <span class="field-val" id="gValue">92<span class="field-unit" id="gUnit">mg/dL</span></span>
+              </div>
+              <input type="range" id="glucose" min="50" max="270" value="92" class="slider slider-g">
+              <div class="preset-row" id="gPresets">
+                <button data-g="70">70</button>
+                <button data-g="85">85</button>
+                <button data-g="92" class="active">92</button>
+                <button data-g="110">110</button>
+                <button data-g="125">125</button>
+                <button data-g="150">150</button>
+                <button data-g="200">200</button>
+              </div>
+              <div class="unit-row">
+                <div class="seg" id="unitSeg">
+                  <button class="seg-btn active" data-unit="mgdl">mg/dL</button>
+                  <button class="seg-btn" data-unit="mmol">mmol/L</button>
+                </div>
+                <span class="hint" data-i18n="personal.fasthint">Use a fasting morning value</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field-head">
+                <span class="field-lbl" data-i18n="personal.age">Age</span>
+                <span class="field-val"><span id="aValue">38</span><span class="field-unit" data-i18n="personal.yr">yr</span><span class="age-chip" id="aChip">35–44</span></span>
+              </div>
+              <input type="range" id="age" min="18" max="99" value="38" class="slider slider-a">
+            </div>
+
+            <div class="field">
+              <span class="field-lbl" data-i18n="personal.sex">Biological sex</span>
+              <div class="sex-grid" id="sexGrid">
+                <button class="sex-btn active" data-sex="male" data-i18n="sex.male">Male</button>
+                <button class="sex-btn" data-sex="female" data-i18n="sex.female">Female</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card pad result-card" id="resultCard">
+            <div class="kicker-sm" data-i18n="personal.result">Estimated risk profile</div>
+            <div class="cat-badge" id="catBadge"><span class="cat-dot"></span><span id="catLabel">Optimal</span></div>
+            <div class="muted" data-i18n="personal.result.sub">All-cause mortality HR vs. optimal range (80–94 mg/dL)</div>
+            <div class="hr-big"><span id="hrValue">1.00</span><span class="hr-x">×</span></div>
+            <div class="hr-explain" id="hrExplain">Within the lowest-mortality fasting glucose range.</div>
+
+            <div class="bar-wrap">
+              <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+              <div class="bar-ticks"><span>0.7×</span><span>1.0×</span><span>2.0×</span><span>3.3×</span></div>
+            </div>
+
+            <div class="ref-row" id="refRow" hidden>
+              <span class="muted" id="refRowText"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: PERSONALIZED CHART + TABLE -->
+        <div class="stack">
+          <div class="card pad chart-card">
+            <div class="card-head">
+              <div class="kicker-sm" data-i18n="personal.chart.kicker">Personalized J-curve</div>
+              <h4 data-i18n="personal.chart.title">Age- and sex-adjusted mortality curve</h4>
+              <p class="muted"><span id="chartSubA">35–44 yr · Male</span> · <span data-i18n="personal.chart.ref">Reference 90–94 mg/dL</span></p>
+            </div>
+            <div class="chart-wrap" id="personalChart"></div>
+            <div class="chart-legend">
+              <span class="lg lg-opt"><i></i><span data-i18n="legend.optimal">Optimal 80–94</span></span>
+              <span class="lg lg-pre"><i></i><span data-i18n="legend.pre">Prediabetes 100–125</span></span>
+              <span class="lg lg-dm"><i></i><span data-i18n="legend.dm">Diabetes ≥126</span></span>
+              <span class="lg lg-you"><i></i><span data-i18n="legend.you">You</span></span>
+            </div>
+          </div>
+
+          <div class="card pad">
+            <div class="kicker-sm">
+              <span data-i18n="personal.table.kicker">HR per +18 mg/dL · Prediabetes range</span>
+              · <span id="tableSubSex">Male</span>
+            </div>
+            <table class="hr-table" id="hrTable">
+              <thead>
+                <tr>
+                  <th data-i18n="personal.table.age">Age</th>
+                  <th data-i18n="personal.table.hr">HR / 18 mg/dL</th>
+                  <th data-i18n="personal.table.up">↑ Mortality</th>
+                </tr>
+              </thead>
+              <tbody><!-- filled by JS --></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW TO IMPROVE ───────────────────────────────────── -->
+  <section class="section" id="improve">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="kicker" data-i18n="improve.kicker">03 · What You Can Do</div>
+        <h3 class="section-title" data-i18n="improve.title">Move toward the nadir</h3>
+        <p class="section-sub" data-i18n="improve.sub">Recommendations adapt to your current category. None of this is medical advice — talk to your physician before changing medications or starting an exercise program.</p>
+      </div>
+
+      <div class="improve-banner" id="improveBanner">
+        <div class="ib-left">
+          <span class="ib-tag" data-i18n="improve.banner.tag">Your current zone</span>
+          <span class="ib-cat" id="ibCat">Optimal</span>
+        </div>
+        <div class="ib-right">
+          <span class="ib-goal-lbl" data-i18n="improve.banner.goal">Target band</span>
+          <span class="ib-goal">80–94 mg/dL</span>
+        </div>
+      </div>
+
+      <div class="improve-grid" id="improveGrid"><!-- filled by JS --></div>
+
+      <div class="card pad clinical-note">
+        <div class="kicker-sm" data-i18n="improve.when.kicker">When to talk to a doctor</div>
+        <ul class="check-list" id="clinicalList"><!-- filled by JS --></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── METHODOLOGY ──────────────────────────────────────── -->
+  <section class="section section-muted" id="methodology">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="kicker" data-i18n="method.kicker">04 · Methodology &amp; Limitations</div>
+        <h3 class="section-title" data-i18n="method.title">How to read these numbers</h3>
+      </div>
+
+      <div class="method-grid">
+        <div class="card pad">
+          <h4 data-i18n="method.what.title">What is a hazard ratio?</h4>
+          <p data-i18n="method.what.body">A hazard ratio (HR) of 1.50 means a 50% higher rate of death over the study period, compared to the reference group. HRs describe populations, not individuals — your personal outcome depends on many factors this study did not measure.</p>
+        </div>
+        <div class="card pad">
+          <h4 data-i18n="method.cohort.title">The cohort</h4>
+          <p data-i18n="method.cohort.body">12,455,361 Korean adults from the National Health Insurance Service (NHIS), 2001–2013. Mean BMI 23.5 kg/m² — leaner than typical Western cohorts. Self-reported diabetes was excluded. Cause-specific mortality and HbA1c were not available.</p>
+        </div>
+        <div class="card pad">
+          <h4 data-i18n="method.adjust.title">Adjustments</h4>
+          <p data-i18n="method.adjust.body">Cox models stratified by age and sex, adjusted for BMI, smoking, alcohol, physical activity, blood pressure, lipids, and household income. Reference band: 90–94 mg/dL. HRs reported per 18 mg/dL (1 mmol/L) increment.</p>
+        </div>
+        <div class="card pad">
+          <h4 data-i18n="method.limits.title">Limitations</h4>
+          <p data-i18n="method.limits.body">Single fasting measurement underestimates true effect (regression dilution). Korean population may not generalize to other ethnic groups. The hypoglycemia arm is approximated from Figure 2 since Table 2 does not stratify HRs below 80 mg/dL. Causation is not established.</p>
+        </div>
+      </div>
+
+      <div class="cite card pad">
+        <div class="kicker-sm" data-i18n="method.cite.kicker">Citation</div>
+        <p class="cite-text">
+          Yi, S.W., Park, S., Lee, Y.H. et al. <em>Association between fasting glucose and all-cause mortality according to sex and age: prospective cohort study.</em> Scientific Reports 7, 8194 (2017).
+          <a href="https://doi.org/10.1038/s41598-017-08498-6" target="_blank" rel="noopener">https://doi.org/10.1038/s41598-017-08498-6</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────────────── -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-disclaimer">
+        <strong data-i18n="foot.disclaimer.lbl">Educational use only.</strong>
+        <span data-i18n="foot.disclaimer.body"> This tool visualizes population-level data and is not medical advice, diagnosis, or treatment. Always consult a licensed clinician for any decision about your health.</span>
+      </div>
+      <div class="foot-links">
+        <a href="https://www.nature.com/articles/s41598-017-08498-6" target="_blank" rel="noopener" data-i18n="foot.link.paper">Original paper</a>
+        <span class="dot">·</span>
+        <a href="https://doi.org/10.1038/s41598-017-08498-6" target="_blank" rel="noopener">DOI</a>
+        <span class="dot">·</span>
+        <span data-i18n="foot.builtwith">Static · Open-source · Privacy-preserving</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
